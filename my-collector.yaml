@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mycollector
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mycollector
+  template:
+    metadata:
+      name: mycollector
+      labels:
+        app: mycollector
+    spec:
+      containers:
+      - name : collector
+        image: myapp3
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9092
+          protocol: TCP
+        env:
+        - name: HOST
+          valueFrom:
+            secretKeyRef:
+              name: myapp
+              key: HOST
+        resources:
+          limits:
+            cpu: 300m
+            memory: 20Mi
+          requests:
+            cpu: 200m
+            memory: 10Mi
